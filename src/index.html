@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Learning Weekly Target - Aplikasi untuk membantu siswa Dicoding menetapkan dan melacak target belajar mingguan" />
     <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <title>Dicoding - Learning Weekly Target</title>
     <script type="module" src="/scripts/index.js"></script>
   </head>
@@ -15,42 +16,49 @@
     <header class="top-header">
       <div class="header-container">
         <div class="header-left">
-          <button id="sidebar-toggle" class="sidebar-toggle">☰</button>
-          <a class="header-brand" href="#/">
-            <span class="brand-icon">📚</span>
+          <button id="sidebar-toggle" class="sidebar-toggle"><i class="fa fa-bars"></i></button>
+          <a class="header-brand" href="#/academies/my">
+            <i class="fa fa-book brand-icon"></i>
             <span class="brand-text">Dicoding</span>
           </a>
         </div>
 
         <nav class="header-nav">
           <ul class="nav-list">
-            <li>
-              <a href="#/" class="nav-link" data-page="home">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-text">Beranda</span>
+                        <li>
+              <a href="#/dashboard" class="nav-link" data-page="home">
+                <span class="nav-text">Home</span>
               </a>
             </li>
             <li>
-              <a href="#/weekly-target" class="nav-link" data-page="weekly">
-                <span class="nav-icon">📅</span>
-                <span class="nav-text">Weekly Target</span>
+              <a href="#/academies/my" class="nav-link" data-page="academies">
+                <span class="nav-text">Academy</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/participatedchallenges" class="nav-link" data-page="challenges">
+                <span class="nav-text">Challenges</span>
+              </a>
+            </li>
+            <li>
+              <a href="#/dashboard/developers/events" class="nav-link" data-page="events">
+                <span class="nav-text">Event</span>
+              </a>
+            </li>
+                        <li>
+              <a href="#/dashboard/jobs" class="nav-link" data-page="jobs">
+                <span class="nav-text">Job</span>
               </a>
             </li>
           </ul>
         </nav>
-
-        <div class="header-right">
-          <button id="mobile-menu-toggle" class="mobile-menu-toggle">
-            <span class="hamburger-icon">☰</span>
-          </button>
-        </div>
       </div>
     </header>
 
     <!-- Sidebar Navigation -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
-        <a class="sidebar-brand" href="#/">
+        <a class="sidebar-brand" href="#/academies/my">
 
         </a>
       </div>
@@ -58,14 +66,14 @@
       <nav class="sidebar-nav">
           <ul class="sidebar-menu">
             <li>
-              <a href="#/" class="sidebar-link" data-page="home">
-                <span class="menu-icon">🏠</span>
+              <a href="#/academies/my" class="sidebar-link" data-page="home">
+                <i class="fa fa-home menu-icon"></i>
                 <span class="menu-text">Beranda</span>
               </a>
             </li>
             <li>
-              <a href="#/weekly-target" class="sidebar-link" data-page="weekly">
-                <span class="menu-icon">📅</span>
+              <a href="#/academies/weekly-target" class="sidebar-link" data-page="weekly">
+                <i class="fa fa-calendar menu-icon"></i>
                 <span class="menu-text">Weekly Target</span>
               </a>
             </li>

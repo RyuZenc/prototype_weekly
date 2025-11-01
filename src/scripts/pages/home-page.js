@@ -1,15 +1,15 @@
-import RuntutanPresenter from '../presenters/runtutan-presenter';
+import HomePresenter from '../presenters/home-presenter';
 
-const RuntutanPage = {
+const HomePage = {
   _presenter: null,
 
   async render() {
     return `
-      <div class="runtutan-page">
+      <div class="home-page">
         <!-- Header Section -->
         <div class="page-header">
           <div class="header-content">
-            <h1 class="page-title">📚 Runtutan Belajar</h1>
+            <h1 class="page-title"><i class="fa fa-book"></i> Runtutan Belajar</h1>
             <p class="page-subtitle">Kelola dan lacak progress pembelajaran Anda di Dicoding</p>
           </div>
         </div>
@@ -35,7 +35,7 @@ const RuntutanPage = {
 
   async afterRender() {
     // Initialize presenter with view methods
-    this._presenter = new RuntutanPresenter(this);
+    this._presenter = new HomePresenter(this);
     await this._presenter.init();
     this._displayStats();
   },
@@ -48,10 +48,10 @@ const RuntutanPage = {
     if (paths.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">📭</div>
+          <div class="empty-icon"><i class="fa fa-inbox fa-4x"></i></div>
           <h3>Belum ada kelas</h3>
           <p>Mulai perjalanan belajar Anda dengan mendaftar kelas di Dicoding!</p>
-          <a href="#/" class="btn btn-primary">Jelajahi Kelas</a>
+          <a href="#/academies/my" class="btn btn-primary">Jelajahi Kelas</a>
         </div>
       `;
       return;
@@ -64,7 +64,7 @@ const RuntutanPage = {
           <div class="path-info">
             <h2 class="path-title">${path.title}</h2>
             <div class="path-deadline">
-              <span class="deadline-icon">⏰</span>
+              <i class="fa fa-clock-o deadline-icon"></i>
               Deadline belajar seluruh kelas: <strong>${path.deadline}</strong>
               <span class="days-remaining">(${path.daysRemaining} hari lagi)</span>
             </div>
@@ -76,8 +76,8 @@ const RuntutanPage = {
             <div class="course-item ${course.completed ? 'completed' : ''}" data-course-id="${course.id}">
               <div class="course-status-icon">
                 ${course.completed ? 
-                  '<span class="check-icon">✓</span>' : 
-                  '<span class="empty-icon">○</span>'
+                  '<span class="check-icon"><i class="fa fa-check"></i></span>' : 
+                  '<span class="empty-icon"><i class="fa fa-circle-o"></i></span>'
                 }
               </div>
               <div class="course-title">${course.title}</div>
@@ -112,28 +112,28 @@ const RuntutanPage = {
 
     statsContainer.innerHTML = `
       <div class="stat-card">
-        <div class="stat-icon">🎯</div>
+        <div class="stat-icon"><i class="fa fa-bullseye"></i></div>
         <div class="stat-info">
           <h3>${stats.totalPaths}</h3>
           <p>Total Learning Path</p>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">📖</div>
+        <div class="stat-icon"><i class="fa fa-book"></i></div>
         <div class="stat-info">
           <h3>${stats.activePaths}</h3>
           <p>Path Aktif</p>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
         <div class="stat-info">
           <h3>${stats.completedCourses}/${stats.totalCourses}</h3>
           <p>Kelas Selesai</p>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">📊</div>
+        <div class="stat-icon"><i class="fa fa-bar-chart"></i></div>
         <div class="stat-info">
           <h3>${stats.completionPercentage}%</h3>
           <p>Progress Keseluruhan</p>
@@ -143,4 +143,4 @@ const RuntutanPage = {
   }
 };
 
-export default RuntutanPage;
+export default HomePage;

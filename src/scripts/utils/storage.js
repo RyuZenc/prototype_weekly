@@ -3,6 +3,7 @@
 const STORAGE_KEYS = {
   STUDY_SCHEDULE: 'study_schedule',
   DAILY_CHECKINS: 'daily_checkins',
+  CHECKIN_DETAILS: 'checkin_details',
 };
 
 // Default study schedule
@@ -74,7 +75,9 @@ export function getDailyCheckIns() {
   const stored = localStorage.getItem(STORAGE_KEYS.DAILY_CHECKINS);
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      // Pastikan mengembalikan array
+      return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
       console.error('Error parsing daily check-ins:', e);
       return [];
@@ -94,14 +97,53 @@ export function saveDailyCheckIns(checkIns) {
 /**
  * Add a daily check-in
  * @param {string} dateStr - Date string in YYYY-MM-DD format
+ * @param {Object} details - Check-in details (mood, progress)
  */
-export function addDailyCheckIn(dateStr) {
+export function addDailyCheckIn(dateStr, details = null) {
   const checkIns = getDailyCheckIns();
   
   if (!checkIns.includes(dateStr)) {
     checkIns.push(dateStr);
     saveDailyCheckIns(checkIns);
   }
+
+  // Save check-in details if provided
+  if (details) {
+    const allDetails = getCheckInDetails();
+    allDetails[dateStr] = {
+      mood: details.mood,
+      progress: details.progress,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEYS.CHECKIN_DETAILS, JSON.stringify(allDetails));
+  }
+}
+
+/**
+ * Get all check-in details
+ * @returns {Object} Object with date keys and detail values
+ */
+export function getCheckInDetails() {
+  const stored = localStorage.getItem(STORAGE_KEYS.CHECKIN_DETAILS);
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error('Error parsing check-in details:', e);
+      return {};
+    }
+  }
+  return {};
+}
+
+/**
+ * Get check-in detail for a specific date
+ * @param {string} dateStr - Date string in YYYY-MM-DD format
+ * @returns {Object|null} Check-in details or null
+ */
+export function getCheckInDetail(dateStr) {
+  const allDetails = getCheckInDetails();
+  return allDetails[dateStr] || null;
 }
 
 /**
@@ -185,4 +227,5 @@ export function getTotalCheckIns() {
 export function clearAllData() {
   localStorage.removeItem(STORAGE_KEYS.STUDY_SCHEDULE);
   localStorage.removeItem(STORAGE_KEYS.DAILY_CHECKINS);
+  localStorage.removeItem(STORAGE_KEYS.CHECKIN_DETAILS);
 }

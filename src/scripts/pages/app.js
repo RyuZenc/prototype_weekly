@@ -1,5 +1,5 @@
-import WeeklyTargetPage from './weekly-target-page';
-import RuntutanPage from './runtutan-page';
+import routes from '../routes/routes';
+import { getActiveRoute } from '../utils/router';
 import NotFoundPage from './not-found-page';
 
 class App {
@@ -174,7 +174,7 @@ class App {
   }
 
   _updateActiveNav() {
-    const hash = window.location.hash || '#/';
+    const hash = window.location.hash || '#/academies/my';
     const navLinks = document.querySelectorAll('.nav-link, .sidebar-link, .mobile-nav-link');
     
     navLinks.forEach(link => {
@@ -186,14 +186,55 @@ class App {
     });
   }
 
+  _shouldShowSidebar(route) {
+    // Only show sidebar on academy pages
+    const academyRoutes = ['/academies', '/academies/my', '/academies/weekly-target'];
+    return academyRoutes.includes(route);
+  }
+
+  _updateSidebarVisibility(route) {
+    const showSidebar = this._shouldShowSidebar(route);
+    
+    if (this._sidebar) {
+      if (showSidebar) {
+        this._sidebar.style.display = 'flex';
+        // Re-initialize sidebar state when showing
+        const isDesktop = window.innerWidth > 1024;
+        if (isDesktop) {
+          document.body.classList.remove('sidebar-closed');
+        }
+      } else {
+        this._sidebar.style.display = 'none';
+        // Remove sidebar-related classes when hiding
+        document.body.classList.add('sidebar-closed');
+        this._sidebar.classList.remove('open');
+        if (this._sidebarOverlay) {
+          this._sidebarOverlay.classList.remove('active');
+        }
+        document.body.classList.remove('sidebar-open');
+      }
+    }
+    
+    // Also show/hide the sidebar toggle button
+    if (this._sidebarToggle) {
+      if (showSidebar) {
+        this._sidebarToggle.style.display = 'flex';
+      } else {
+        this._sidebarToggle.style.display = 'none';
+      }
+    }
+  }
+
   async renderPage() {
     // Show loading state
     this._showLoading();
 
     try {
-      const url = this._parseActiveUrlWithCombiner();
-      const routes = this._routes();
-      const page = routes[url] || routes['/404'] || routes['/'];
+      const activeRoute = getActiveRoute();
+      const page = routes[activeRoute] || NotFoundPage;
+      
+      // Update sidebar visibility based on route
+      this._updateSidebarVisibility(activeRoute);
       
       // Render page
       this._content.innerHTML = await page.render();
@@ -218,7 +259,7 @@ class App {
       window.scrollTo(0, 0);
 
       // Update page title
-      this._updatePageTitle(url);
+      this._updatePageTitle(activeRoute);
     } catch (error) {
       console.error('Error rendering page:', error);
       this._showError();
@@ -229,7 +270,7 @@ class App {
     this._content.innerHTML = `
       <div style="display: flex; justify-content: center; align-items: center; min-height: 50vh;">
         <div style="text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+          <div style="font-size: 3rem; margin-bottom: 1rem;"><i class="fa fa-spinner fa-spin"></i></div>
           <p style="color: var(--text-light);">Memuat halaman...</p>
         </div>
       </div>
@@ -240,12 +281,12 @@ class App {
     this._content.innerHTML = `
       <div style="display: flex; justify-content: center; align-items: center; min-height: 50vh;">
         <div style="text-align: center; max-width: 400px; padding: 2rem;">
-          <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+          <div style="font-size: 4rem; margin-bottom: 1rem;"><i class="fa fa-exclamation-triangle"></i></div>
           <h2 style="margin-bottom: 1rem; color: var(--text-dark);">Terjadi Kesalahan</h2>
           <p style="color: var(--text-light); margin-bottom: 1.5rem;">
             Maaf, terjadi kesalahan saat memuat halaman.
           </p>
-          <a href="#/" class="btn btn-primary">Kembali ke Beranda</a>
+          <a href="#/academies/my" class="btn btn-primary">Beranda</a>
         </div>
       </div>
     `;
@@ -254,48 +295,12 @@ class App {
   _updatePageTitle(url) {
     const titles = {
       '/': 'Runtutan Belajar - Dicoding',
-      '/weekly-target': 'Weekly Target - Dicoding',
-      '/404': '404 - Halaman Tidak Ditemukan',
+      '/academies': 'Weekly Target - Dicoding',
+      '/academies/my': 'Runtutan Belajar - Dicoding',
+
     };
     document.title = titles[url] || 'Dicoding - Learning Weekly Target';
   }
-
-  _routes() {
-    return {
-      '/': RuntutanPage,  // Beranda = Runtutan Belajar
-      '/weekly-target': WeeklyTargetPage,  // Weekly Target
-      '/404': NotFoundPage,  // 404 Page
-    };
-  }
-
-  _parseActiveUrlWithCombiner() {
-    const url = window.location.hash.slice(1).toLowerCase();
-    const splitedUrl = this._urlSplitter(url);
-    const combineUrl = this._urlCombiner(splitedUrl);
-
-    return combineUrl;
-  }
-
-  _urlSplitter(url) {
-    const urlsSplits = url.split('/');
-    return urlsSplits;
-  }
-
-  _urlCombiner(splitedUrl) {
-    return splitedUrl.reduce((accumulator, currentValue) => {
-      return currentValue ? `${accumulator}/${currentValue}` : accumulator;
-    });
-  }
-
-  // Helper method for programmatic navigation
-  navigateTo(path) {
-    window.location.hash = path;
-  }
-
-  // Get current route
-  getCurrentRoute() {
-    return this._parseActiveUrlWithCombiner();
-  }
-}
+};
 
 export default App;

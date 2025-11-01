@@ -1,5 +1,5 @@
-// Presenter for Runtutan Belajar page
-class RuntutanPresenter {
+// Presenter for Home page
+class HomePresenter {
   constructor(view) {
     this._view = view;
   }
@@ -35,7 +35,7 @@ class RuntutanPresenter {
             completed: true
           }
         ],
-        icon: '🎓',
+        icon: '<i class="fa fa-graduation-cap"></i>',
         status: 'active'
       },
       {
@@ -60,7 +60,7 @@ class RuntutanPresenter {
             completed: false
           }
         ],
-        icon: '🎓',
+        icon: '<i class="fa fa-graduation-cap"></i>',
         status: 'active'
       },
       {
@@ -85,7 +85,7 @@ class RuntutanPresenter {
             completed: false
           }
         ],
-        icon: '🎓',
+        icon: '<i class="fa fa-graduation-cap"></i>',
         status: 'not-started'
       }
     ];
@@ -137,11 +137,11 @@ class RuntutanPresenter {
     const learningPaths = this._getLearningPaths();
     let filteredPaths;
 
-    if (tabName === 'dipelajari') {
-      filteredPaths = learningPaths.filter(path => 
-        path.courses.some(course => course.completed)
-      );
+    if (tabName === 'semua') {
+      // Show all paths (default)
+      filteredPaths = learningPaths;
     } else if (tabName === 'diselesaikan') {
+      // Show only paths where all courses are completed
       filteredPaths = learningPaths.filter(path => 
         path.courses.every(course => course.completed)
       );
@@ -185,4 +185,4 @@ class RuntutanPresenter {
   }
 }
 
-export default RuntutanPresenter;
+export default HomePresenter;
